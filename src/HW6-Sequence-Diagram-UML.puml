@@ -1,0 +1,53 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+title School Facility Rental - Sequence
+
+actor Renter
+
+participant Website
+participant "School Staff" as Staff
+participant "Payment Service" as Pay
+participant "Email Service" as Email
+
+Renter -> Website: Submit request
+Website -> Website: Checks Facility availability
+
+alt Facility available
+    Website -> Renter: Enter contact information
+else Facility not available
+    Website -> Renter: Facility not available
+    alt changeDate
+        Renter -> Website: Change date
+    else cancel
+        Website -> Renter: Request canceled
+    end
+
+end
+
+Website -> Staff: Request review
+
+alt School approved
+    Staff -> Website: School approved request
+    Website -> Pay: Charge renter
+
+    alt payment succeeds
+        Pay -> Website: Payment successful
+        Website -> Website: Save booking
+        Website -> Email: Generate confirmation email
+
+        Email -> Renter: Sent Renter the Confirmation email
+    else payment failed
+        Pay -> Website: Payment failed
+        Website -> Email: Generate payment failed email
+
+        Email -> Renter: Payment failed notice
+    end
+else School rejected
+    Staff -> Website: School rejected request
+    Website -> Email: Generate rejection email
+
+    Email -> Renter: Rejection email
+end
+
+@enduml

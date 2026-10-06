@@ -1,0 +1,82 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+/'Renter chooses a facility and a date'/
+/'School checks(School Staff) checks the request if approved as well as payment'/
+/'Renter see output of a confirmation'/
+/'
+Renter Tasked
+Choose facility, date,  time, event type
+enter information
+
+website tasked
+check avaiblity
+proccess payment
+and email services
+
+School tasked
+checks request from renter
+can approve or deny it
+
+renter-website-(renter - school)-website
+'/
+
+title School Facility Rental - Activity
+
+|Renter|
+start
+:Select facility, date,
+time, and event type;
+
+|Website|
+:Check facility availability;
+
+if ([Facility available]) then (yes)
+
+else (no)
+
+:Message Renter:
+Facility Not Available;
+
+|Renter|
+if (Choose different date?) then (yes)
+:Choose different date;
+else (no)
+stop
+endif
+
+endif
+
+|Renter|
+:Enter contact information;
+:Submit request;
+
+|School Staff|
+:Review request;
+
+if ([School approved]) then (yes)
+
+|Website|
+:Charge Renter;
+
+if ([payment succeeds]) then (yes)
+:Save Facility, date and time, event;
+:Send confirmation email;
+stop
+
+else (no)
+:Record payment failure;
+:Send payment failed email;
+stop
+
+endif
+
+else (no)
+
+|Website|
+:Record rejection;
+:Send rejection email;
+stop
+
+endif
+
+@enduml
